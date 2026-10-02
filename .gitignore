@@ -1,0 +1,13 @@
+# data — regenerate with the download scripts
+data/
+
+# python
+.venv/
+__pycache__/
+*.pyc
+
+# macOS
+.DS_Store
+
+# notebooks
+.ipynb_checkpoints/
