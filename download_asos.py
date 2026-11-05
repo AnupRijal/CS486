@@ -56,17 +56,19 @@ for year, (start, end) in RANGES.items():
 
         print(f"get   {out.name}  ({len(batch)} stations)")
 
-        # IEM drops large transfers sometimes. Try three times before giving up.
-        for attempt in range(3):
+        for attempt in range(5):
             try:
                 r = requests.get(URL, params=params, timeout=1800)
                 r.raise_for_status()
                 break
             except Exception as e:
+                wait = [30, 60, 120, 300][attempt] if attempt < 4 else 0
                 print(f"      attempt {attempt + 1} failed: {type(e).__name__}")
-                if attempt == 2:
+                if attempt == 4:
                     raise
-                time.sleep(15)
+                print(f"      waiting {wait}s")
+                time.sleep(wait)
 
         out.write_text(r.text)
+        time.sleep(3)
         print(f"saved {out.name}  {len(r.text)/1e6:.1f} MB")
